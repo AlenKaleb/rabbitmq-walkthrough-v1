@@ -1,0 +1,34 @@
+# WebApplicationEntrypoint/Dockerfile
+
+## Propósito
+Define o build multi‑stage do aplicativo ASP.NET Core.
+
+## Código anotado
+
+```dockerfile
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+WORKDIR /app
+EXPOSE 80
+
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /src
+COPY ["WebApplicationEntrypoint/WebApplicationEntrypoint.csproj", "WebApplicationEntrypoint/"]
+RUN dotnet restore "WebApplicationEntrypoint/WebApplicationEntrypoint.csproj"
+COPY . .
+WORKDIR "/src/WebApplicationEntrypoint"
+RUN dotnet build "WebApplicationEntrypoint.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "WebApplicationEntrypoint.csproj" -c Release -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "WebApplicationEntrypoint.dll"]
+```
+
+### Anotações técnicas
+- **Multi‑stage build**: reduz tamanho final da imagem.
+- **Stage `build`**: restaura e compila com SDK completo.
+- **Stage `publish`**: gera artefatos otimizados.
+- **Stage `final`**: usa runtime leve, garantindo menor superfície de ataque.

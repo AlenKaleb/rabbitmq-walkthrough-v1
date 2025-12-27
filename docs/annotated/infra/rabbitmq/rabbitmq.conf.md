@@ -1,0 +1,33 @@
+# infra/rabbitmq/rabbitmq.conf
+
+## Propósito
+Configurações do RabbitMQ para autenticação, métricas e limites.
+
+## Código anotado
+
+```ini
+loopback_users.guest = false
+listeners.tcp.default = 5672
+management.tcp.port = 15672
+
+prometheus.return_per_object_metrics = true
+prometheus.path = /metrics
+prometheus.tcp.port = 15692
+
+collect_statistics_interval = 1000
+management.rates_mode = detailed
+
+default_user = WalkthroughUser
+default_pass = WalkthroughPassword
+default_vhost = Walkthrough
+default_user_tags.administrator = true
+
+
+deprecated_features.permit.management_metrics_collection = true
+```
+
+### Anotações técnicas
+- **Usuário não‑guest**: desabilita `guest` e cria credenciais próprias.
+- **Management + Prometheus**: habilita métricas e endpoint de gerenciamento.
+- **`collect_statistics_interval`**: coleta de métricas a cada 1s.
+- **VHost padrão**: organiza recursos do walkthrough.

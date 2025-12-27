@@ -1,0 +1,116 @@
+# docker-compose.override.yml
+
+## Propósito
+Completa o ambiente com RabbitMQ, Postgres, Grafana e pgAdmin para desenvolvimento local.
+
+## Código anotado
+
+```yaml
+version: '3.4'
+
+services:
+  webapplicationentrypoint:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8877:8080" # habilitado visualização no browser
+    restart: always
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      grafana:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+
+  rabbitmq:
+    container_name: RabbitMQ
+    hostname: rabbitmq
+    build:
+      context: ./infra/rabbitmq
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq/mnesia
+    ports:
+      - "15672:15672" #management # habilitado visualização no browser
+      - "5672:5672" #amqp       # desnecessário
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -I -s -L http://localhost:15672 || exit 1"
+        ]
+      interval: 30s
+      timeout: 20s
+      retries: 5
+    networks:
+      - walkthrough-net
+
+  grafana:
+    image: grafana/grafana:8.0.5-ubuntu
+    container_name: grafana
+    environment: { "TZ": "America/Sao_Paulo" }
+    ports:
+      - "3000:3000" # habilitado visualização no browser
+    volumes:
+      - ./infra/grafana/:/var/lib/grafana
+    networks:
+      - walkthrough-net
+
+  postgres:
+    image: postgres:14.4
+    container_name: postgres
+    ports:
+      - 5432:5432
+    environment:
+      {
+        "POSTGRES_DB": "Walkthrough",
+        "POSTGRES_USER": "WalkthroughUser",
+        "POSTGRES_PASSWORD": "WalkthroughPass",
+        "TZ": "America/Sao_Paulo"
+      }
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "pg_isready",
+          "--dbname=Walkthrough",
+          "--username=WalkthroughUser"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - walkthrough-net
+    volumes:
+      - "postgres_data:/var/lib/postgresql/data"
+      - ./infra/postgres/:/docker-entrypoint-initdb.d
+
+  pgadmin4:
+    image: dpage/pgadmin4:6.5
+    container_name: pgadmin
+    hostname: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: gago@gago.io
+      PGADMIN_DEFAULT_PASSWORD: WalkthroughPass
+    volumes:
+      - "pgadmin_data:/var/lib/pgadmin/"
+      - "./infra/pgadmin/servers.json:/pgadmin4/servers.json"
+    ports:
+      - "82:80"
+    networks:
+      - walkthrough-net
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  rabbitmq_data:
+  postgres_data:
+  pgadmin_data:
+```
+
+### Anotações técnicas
+- **Dependências saudáveis**: `depends_on` garante ordem de inicialização.
+- **Healthchecks**: evita iniciar o app antes do RabbitMQ/Postgres estarem prontos.
+- **Volumes persistentes**: mantêm dados de RabbitMQ/Postgres/pgAdmin entre reinícios.
+- **Grafana**: usa volume local para armazenar dashboards e configurações.
