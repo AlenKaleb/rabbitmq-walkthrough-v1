@@ -1,0 +1,54 @@
+# RabbitMQ-Walkthrough.sln
+
+## Propósito
+Solução Visual Studio que agrupa os projetos da aplicação e do Docker Compose.
+
+## Código anotado
+
+```text
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33617.297
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApplicationEntrypoint", "WebApplicationEntrypoint\WebApplicationEntrypoint.csproj", "{7DB7F02C-35FD-45FA-9BA8-43FCF3F333C4}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{FD9669C0-BE53-42C0-977E-94D6AC15549B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitMQWalkthrough.Core", "RabbitMQWalkthrough.Core\RabbitMQWalkthrough.Core.csproj", "{9A5CAC95-22D2-45DF-B79A-290373C129C2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2CB9E58A-F0DB-4C66-89B0-05607CE5849A}"
+	ProjectSection(SolutionItems) = preProject
+		infra\rabbitmq\rabbitmq.conf = infra\rabbitmq\rabbitmq.conf
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7DB7F02C-35FD-45FA-9BA8-43FCF3F333C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DB7F02C-35FD-45FA-9BA8-43FCF3F333C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DB7F02C-35FD-45FA-9BA8-43FCF3F333C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DB7F02C-35FD-45FA-9BA8-43FCF3F333C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD9669C0-BE53-42C0-977E-94D6AC15549B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD9669C0-BE53-42C0-977E-94D6AC15549B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD9669C0-BE53-42C0-977E-94D6AC15549B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD9669C0-BE53-42C0-977E-94D6AC15549B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A5CAC95-22D2-45DF-B79A-290373C129C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A5CAC95-22D2-45DF-B79A-290373C129C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A5CAC95-22D2-45DF-B79A-290373C129C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A5CAC95-22D2-45DF-B79A-290373C129C2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CA33E501-8BC5-4702-B143-548238DA6F33}
+	EndGlobalSection
+EndGlobal
+```
+
+### Anotações técnicas
+- **Organização**: agrega o projeto web, a biblioteca core e o docker-compose.
+- **Solution Items**: referencia arquivos de infraestrutura para fácil acesso.

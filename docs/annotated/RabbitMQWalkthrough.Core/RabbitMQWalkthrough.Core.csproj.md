@@ -1,0 +1,40 @@
+# RabbitMQWalkthrough.Core/RabbitMQWalkthrough.Core.csproj
+
+## Propósito
+Define o projeto .NET da biblioteca de infraestrutura compartilhada (mensageria, métricas e dados).
+
+## Código anotado
+
+```xml
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Dapper" Version="2.1.66" />
+        <PackageReference Include="Dapper.Contrib" Version="2.0.78" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.5" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.5" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="Newtonsoft.Json.Bson" Version="1.0.3" />
+        <PackageReference Include="Newtonsoft.Json.Schema" Version="4.0.1" />
+        <PackageReference Include="Npgsql" Version="9.0.3" />
+        <PackageReference Include="Polly" Version="8.5.2" />
+        <PackageReference Include="RabbitMQ.Client" Version="7.1.2" />
+        <PackageReference Include="RestSharp" Version="112.1.0" />
+        <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
+    </ItemGroup>
+
+</Project>
+```
+
+### Anotações técnicas
+- **TargetFramework `net9.0`**: alinha o projeto à versão moderna do .NET, permitindo usar APIs atuais e melhor performance.
+- **Dapper**: micro‑ORM usado para acesso rápido e direto ao Postgres (SQL explícito, pouco overhead).
+- **Npgsql**: driver oficial para Postgres.
+- **RabbitMQ.Client**: API oficial de mensageria.
+- **Polly**: estratégia de resiliência (retry exponencial) para conexões instáveis.
+- **RestSharp + Newtonsoft.Json**: cliente HTTP e serialização para consultar a Management API do RabbitMQ.
+- **Microsoft.Extensions.* Abstractions**: integrações com DI e logging sem depender de implementação concreta.
